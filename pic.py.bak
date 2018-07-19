@@ -1,0 +1,84 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'pic.ui'
+#
+# Created by: PyQt5 UI code generator 5.11.2
+#
+# WARNING! All changes made in this file will be lost!
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+class Ui_MotorControl(object):
+    def setupUi(self, MotorControl):
+        MotorControl.setObjectName("MotorControl")
+        MotorControl.resize(487, 331)
+        
+        self.stepcontroler = QtWidgets.QSpinBox(MotorControl)
+        self.stepcontroler.setGeometry(QtCore.QRect(130, 20, 101, 31))
+        self.stepcontroler.setMinimum(-999)
+        self.stepcontroler.setMaximum(999)
+        self.stepcontroler.setObjectName("stepcontroler")
+        self.stepcontroler.valueChanged.connect(self.stepCount)
+        self.stepcontroler.valueChanged.connect(self.mainControl)
+        
+        self.progressBar = QtWidgets.QProgressBar(MotorControl)
+        self.progressBar.setGeometry(QtCore.QRect(50, 260, 161, 23))
+        self.progressBar.setProperty("value", 0)
+        self.progressBar.setObjectName("progressBar")
+        
+        self.speedcontrol = QtWidgets.QSlider(MotorControl)
+        self.speedcontrol.setGeometry(QtCore.QRect(130, 70, 311, 22))
+        self.speedcontrol.setMaximum(300)
+        self.speedcontrol.setMinimum(-300)
+        self.speedcontrol.setSingleStep(1)
+        self.speedcontrol.setTickPosition(QtWidgets.QSlider.TicksBothSides)
+        self.speedcontrol.setOrientation(QtCore.Qt.Horizontal)
+        self.speedcontrol.setObjectName("speedcontrol")
+        self.speedcontrol.valueChanged.connect(self.speedCalculator)
+        self.speedcontrol.valueChanged.connect(self.mainControl)
+        
+
+        self.speedBar = QtWidgets.QStatusBar(MotorControl)
+        self.speedBar.setGeometry(QtCore.QRect(130, 80, 311, 22))
+        self.speedBar.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.speedBar.setObjectName("SpeedBar")
+        
+        self.step = QtWidgets.QLabel(MotorControl)
+        self.step.setGeometry(QtCore.QRect(10, 20, 91, 21))
+        self.step.setObjectName("step")
+        
+        self.speed = QtWidgets.QLabel(MotorControl)
+        self.speed.setGeometry(QtCore.QRect(10, 70, 81, 21))
+        self.speed.setObjectName("speed")
+        
+        self.lengthUnit = QtWidgets.QStatusBar(MotorControl)
+        self.lengthUnit.setGeometry(QtCore.QRect(240, 20, 201, 31))
+        self.lengthUnit.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.lengthUnit.setObjectName("lengthUnit")
+        
+        self.seaence = QtWidgets.QLabel(MotorControl)
+        self.seaence.setGeometry(QtCore.QRect(10, 150, 101, 31))
+        self.seaence.setObjectName("seaence")
+        
+        self.sequenceselector = QtWidgets.QSlider(MotorControl)
+        self.sequenceselector.setGeometry(QtCore.QRect(130, 160, 311, 22))
+        self.sequenceselector.setMaximum(2)
+        self.sequenceselector.setSingleStep(1)
+        self.sequenceselector.setPageStep(1)
+        self.sequenceselector.setOrientation(QtCore.Qt.Horizontal)
+        self.sequenceselector.setTickPosition(QtWidgets.QSlider.TicksBothSides)
+        self.sequenceselector.setTickInterval(1)
+        self.sequenceselector.setObjectName("sequenceselector")
+        self.sequenceselector.valueChanged.connect(self.mainControl)
+        
+        self.move = QtWidgets.QPushButton(MotorControl)
+        self.move.setGeometry(QtCore.QRect(370, 260, 92, 36))
+        self.move.setObjectName("move")
+        
+        self.reset = QtWidgets.QPushButton(MotorControl)
+        self.reset.setGeometry(QtCore.QRect(240, 260, 92, 36))
+        self.reset.setObjectName("reset")
+
+        self.retranslateUi(MotorControl)
+        QtCore.QMetaObject.connectSlotsByName(MotorControl)
+
