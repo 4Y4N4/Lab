@@ -56,5 +56,5 @@ class Controller:
             #time to break
             StepCounter += 1
 
-            stepCb(stepCounter)
+            stepCb(StepCounter)
         self.stepState = microStep

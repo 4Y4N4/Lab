@@ -30,7 +30,8 @@ class MotorControllerApp:
         ui.move.clicked.connect(self.activate)
 
     def activate(self):
-        valarr =self.mainControl()
+        ui = self.ui
+        valarr = self.mainControl()
         Seq = controle.seqSetting(valarr[0])
         ui.progressBar.setMaximum(valarr[1])
         ui.progressBar.setValue(0)
