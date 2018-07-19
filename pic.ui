@@ -184,19 +184,6 @@
     <string>move</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="reset">
-   <property name="geometry">
-    <rect>
-     <x>240</x>
-     <y>260</y>
-     <width>92</width>
-     <height>36</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>reset</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="speedBar">
    <property name="geometry">
     <rect>

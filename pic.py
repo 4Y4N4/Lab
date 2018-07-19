@@ -60,9 +60,6 @@ class Ui_MotorControl(object):
         self.move = QtWidgets.QPushButton(MotorControl)
         self.move.setGeometry(QtCore.QRect(370, 260, 92, 36))
         self.move.setObjectName("move")
-        self.reset = QtWidgets.QPushButton(MotorControl)
-        self.reset.setGeometry(QtCore.QRect(240, 260, 92, 36))
-        self.reset.setObjectName("reset")
         self.speedBar = QtWidgets.QLabel(MotorControl)
         self.speedBar.setGeometry(QtCore.QRect(130, 100, 181, 20))
         self.speedBar.setObjectName("speedBar")
@@ -78,7 +75,6 @@ class Ui_MotorControl(object):
         self.lengthUnit.setText(_translate("MotorControl", "<html><head/><body><p><span style=\" font-size:14pt;\">㎛</span></p></body></html>"))
         self.seaence.setText(_translate("MotorControl", "spin sequance"))
         self.move.setText(_translate("MotorControl", "move"))
-        self.reset.setText(_translate("MotorControl", "reset"))
         self.speedBar.setText(_translate("MotorControl", "㎛"))
 
 
