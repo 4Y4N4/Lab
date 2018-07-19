@@ -1,5 +1,6 @@
+import RPi.GPIO as GPIO
+import time
 
-import RPi.GPIO as GP
 class Controller:
 
     def __init__(self):
@@ -37,13 +38,13 @@ class Controller:
         tempSeq = [seq1, seq2, seq3]
         return tempSeq[arg2]
 
-    def mainLoop(self, Seq, waitT, Dir, step):
+    def mainLoop(self, Seq, waitTime, Dir, step):
         StepCounter = 0
         microStep = self.stepState
         while StepCounter < step:
             j = 0
             for i in Seq[microStep]:
-                GPIO.output(self.pins[j], i)
+                GPIO.output(self.Pins[j], i)
                 j += 1
             if Dir > 0:
                 microStep += 1
@@ -51,7 +52,7 @@ class Controller:
                 microStep -= 1
             microStep = microStep % len(Seq)
             # Wait before moving on
-            time.sleep(WaitTime)
+            time.sleep(waitTime)
             #time to break
             StepCounter += 1
         self.stepState = microStep
