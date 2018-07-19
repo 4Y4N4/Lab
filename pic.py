@@ -12,17 +12,19 @@ class Ui_MotorControl(object):
     def setupUi(self, MotorControl):
         MotorControl.setObjectName("MotorControl")
         MotorControl.resize(487, 331)
-        self.stepcontroler = QtWidgets.QSpinBox(MotorControl)
-        self.stepcontroler.setGeometry(QtCore.QRect(130, 20, 101, 31))
-        self.stepcontroler.setMinimum(-999)
-        self.stepcontroler.setMaximum(999)
-        self.stepcontroler.setObjectName("stepcontroler")
+        self.stepcontroller = QtWidgets.QSpinBox(MotorControl)
+        self.stepcontroller.setGeometry(QtCore.QRect(130, 20, 101, 31))
+        self.stepcontroller.setMinimum(-999)
+        self.stepcontroller.setMaximum(999)
+        self.stepcontroller.setObjectName("stepcontroller")
         self.progressBar = QtWidgets.QProgressBar(MotorControl)
         self.progressBar.setGeometry(QtCore.QRect(50, 260, 161, 23))
         self.progressBar.setProperty("value", 24)
         self.progressBar.setObjectName("progressBar")
         self.speedcontrol = QtWidgets.QSlider(MotorControl)
         self.speedcontrol.setGeometry(QtCore.QRect(130, 70, 311, 22))
+        self.speedcontrol.setMinimum(-200)
+        self.speedcontrol.setMaximum(200)
         self.speedcontrol.setOrientation(QtCore.Qt.Horizontal)
         self.speedcontrol.setObjectName("speedcontrol")
         self.step = QtWidgets.QLabel(MotorControl)
@@ -61,6 +63,9 @@ class Ui_MotorControl(object):
         self.reset = QtWidgets.QPushButton(MotorControl)
         self.reset.setGeometry(QtCore.QRect(240, 260, 92, 36))
         self.reset.setObjectName("reset")
+        self.speedBar = QtWidgets.QLabel(MotorControl)
+        self.speedBar.setGeometry(QtCore.QRect(130, 100, 181, 20))
+        self.speedBar.setObjectName("speedBar")
 
         self.retranslateUi(MotorControl)
         QtCore.QMetaObject.connectSlotsByName(MotorControl)
@@ -74,6 +79,7 @@ class Ui_MotorControl(object):
         self.seaence.setText(_translate("MotorControl", "spin sequance"))
         self.move.setText(_translate("MotorControl", "move"))
         self.reset.setText(_translate("MotorControl", "reset"))
+        self.speedBar.setText(_translate("MotorControl", "㎛"))
 
 
 if __name__ == "__main__":

@@ -1,46 +1,61 @@
 import sys
 import time
-#import RPi.GPIO as GP
-import stepper
+from stepper import Controller
+from pic import Ui_MotorControl
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import uic
-import pic
-"""
-GPIO.setmode(GPIO.BCM)
 
-#physical pina are 31,33,35,37
-Pins = [6,13,19,26]
-for pin in Pins:
-    print "setup pins"
-    GPIO.setup(pin, GPIO.OUT)
-    GPIO.output(pin, False)
 
-controle = stepper()
-"""
-controle = stepper()
+
+controle = Controller()
 motorGUI = Ui_MotorControl()
-class window(motorGUI, QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setupUi(self)
-        self.retranslateUI(self, MotorControl)
+
+class MotorControllerApp:
+    def __init__(self, argv):
+        self.app = QtWidgets.QApplication(argv)
+        self.picDialog = QtWidgets.QDialog()
+        self.ui = Ui_MotorControl()
+        ui = self.ui
+
+        ui.setupUi(self.picDialog)
+
+        # Setup here
+        ui.stepcontroller.valueChanged.connect(self.stepCount)
+        ui.stepcontroller.valueChanged.connect(self.mainControl)
+        ui.speedcontrol.valueChanged.connect(self.speedCalculator)
+        ui.speedcontrol.valueChanged.connect(self.mainControl)
+        ui.sequenceselector.valueChanged.connect(self.mainControl)
+        ui.move.clicked.connect(self.activate)
+    def activate(self):
+        valarr =self.mainControl()
+        Seq = controle.seqSetting(valarr[0])
+        controle.mainLoop(Seq, abs(valarr[2])/1000 , abs(valarr[2])/valarr[2], valarr[1])
+
+    def show(self):
+        return self.picDialog.show()
+
+    def exec(self):
+        self.app.exec_()
+
     def mainControl(self):
-        seqNum = self.sequenceselector.value()
-        stepNum = self.stepcontroler.value()
-        speedNum = self.speedcontrol.value()
+        ui = self.ui
+        seqNum = ui.sequenceselector.value()
+        stepNum = ui.stepcontroller.value()
+        speedNum = ui.speedcontrol.value()
         return [seqNum, stepNum, speedNum]
 
     def stepCount(self):
-        val = self.stepcontroler.value()
+        ui = self.ui
+        val = ui.stepcontroller.value()
         um = float(val) *float(7.7515)
         if self.mainControl()[0] == 0:
             msg = '%f㎛'%(um/float(2))
         else:
             msg = '%f㎛'%um
-        self.lengthUnit.showMessage(msg)
- 
+        ui.lengthUnit.setText(msg)
     def speedCalculator(self):
-        wT = self.speedcontrol.value()
+        ui = self.ui
+        wT = ui.speedcontrol.value()
         if wT == 0:
             mesg = 'stop'
         else :
@@ -50,21 +65,11 @@ class window(motorGUI, QMainWindow):
             else:
                 speed = float(7.7515)*1000/float(wT)
                 mesg = '%f㎛/s'%speed
-        self.speedBar.showMessage(mesg)
+        ui.speedBar.setText(mesg)
 
-    def retranslateUi(self, MotorControl):
-        _translate = QtCore.QCoreApplication.translate
-        MotorControl.setWindowTitle(_translate("MotorControl", "Motorcontroller"))
-        self.step.setText(_translate("MotorControl", "motor step"))
-        self.speed.setText(_translate("MotorControl", "motorspeed"))
-self.seaence.setText(_translate("MotorControl", "spin sequance"))
-        self.move.setText(_translate("MotorControl", "move"))
-        self.reset.setText(_translate("MotorControl", "reset"))
 if __name__ == "__main__":
     import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MotorControl = QtWidgets.QDialog()
-    ui = Ui_MotorControl()
-    ui.setupUi(MotorControl)
-    MotorControl.show()
-    sys.exit(app.exec_())
+    motorControlApp = MotorControllerApp(sys.argv)
+    motorControlApp.show()
+    sys.exit(motorControlApp.exec())
+

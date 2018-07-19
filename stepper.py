@@ -1,26 +1,18 @@
+
+import RPi.GPIO as GP
 class Controller:
-    
 
-    # Read wait time and diraction from command line
-    def revolutionSetting(self,arg1):
-        if float(arg1)>1: 
-            WaitT = float(arg1)/float(1000)
-            StepD = 1
-        elif float(arg1)<-1:
-            WaitT = -float(arg1)/float(1000)
-            StepD = -1
-        elif (float(arg1)>=-1)and(float(arg1)<0):
-            WaitT = -float(arg1)/float(1000)
-            StepD = -1
-        else:
-            WaitT = float(arg1)/float(1000)
-            StepD = 1
-        return [WaitT, StepD]
- 
-
-
-
+    def __init__(self):
         
+        GPIO.setmode(GPIO.BCM)
+        #physical pin are 31,33,35,37
+        Pins = [6,13,19,26]
+        self.Pins = Pins
+        self.stepState = 0
+        for pin in Pins:
+            GPIO.setup(pin, GPIO.OUT)
+            GPIO.output(pin, False)
+            
     def seqSetting(self,arg2):
         
         seq1 = [[1,0,0,0],
@@ -45,40 +37,21 @@ class Controller:
         tempSeq = [seq1, seq2, seq3]
         return tempSeq[arg2]
 
-
-
-
-
-
-"""
-    def mainLoof(self, Seq, waitT, Dir):
-        count = 0
+    def mainLoop(self, Seq, waitT, Dir, step):
         StepCounter = 0
-        while True:
-            if pin >= len(seq):
-                pi= 0
-            print (StepCounter)
-            print (Seq[StepCounter])
-            for pin in range(0, 4):
-                xpin = StepPins[pin]
-                if Seq[StepCounter][pin]!=0:
-                    print ("Enable GPIO %i" %(xpin)
-                    GPIO.output(xpin, True)
-                else:
-                GPIO.output(xpin, False)
-
-                StepCounter += StepDir
-
-            # If we reach the end of the sequence
-            # start again
-            if (StepCounter>=StepCount):
-                StepCounter = 0
-            if (StepCounter<0):
-                StepCounter = StepCount+StepDir
-
+        microStep = self.stepState
+        while StepCounter < step:
+            j = 0
+            for i in Seq[microStep]:
+                GPIO.output(self.pins[j], i)
+                j += 1
+            if Dir > 0:
+                microStep += 1
+            else:
+                microStep -= 1
+            microStep = microStep % len(Seq)
             # Wait before moving on
             time.sleep(WaitTime)
             #time to break
-            if False:
-                break
-"""
+            StepCounter += 1
+        self.stepState = microStep
