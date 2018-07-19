@@ -26,10 +26,13 @@ class MotorControllerApp:
         ui.speedcontrol.valueChanged.connect(self.mainControl)
         ui.sequenceselector.valueChanged.connect(self.mainControl)
         ui.move.clicked.connect(self.activate)
+
     def activate(self):
         valarr =self.mainControl()
         Seq = controle.seqSetting(valarr[0])
-        controle.mainLoop(Seq, abs(valarr[2])/1000 , abs(valarr[2])/valarr[2], valarr[1])
+        ui.progressBar.setMaximum(valarr[1])
+        ui.progressBar.setValue(0)
+        controle.mainLoop(Seq, abs(valarr[2])/1000 , abs(valarr[2])/valarr[2], valarr[1], lambda step: ui.progressBar.setValue(step))
 
     def show(self):
         return self.picDialog.show()

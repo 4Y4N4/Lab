@@ -38,7 +38,7 @@ class Controller:
         tempSeq = [seq1, seq2, seq3]
         return tempSeq[arg2]
 
-    def mainLoop(self, Seq, waitTime, Dir, step):
+    def mainLoop(self, Seq, waitTime, Dir, step, stepCb):
         StepCounter = 0
         microStep = self.stepState
         while StepCounter < step:
@@ -55,4 +55,6 @@ class Controller:
             time.sleep(waitTime)
             #time to break
             StepCounter += 1
+
+            stepCb(stepCounter)
         self.stepState = microStep
