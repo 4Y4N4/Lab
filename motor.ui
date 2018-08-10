@@ -6,35 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>487</width>
-    <height>331</height>
+    <width>655</width>
+    <height>283</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QSpinBox" name="stepcontroler">
-   <property name="geometry">
-    <rect>
-     <x>130</x>
-     <y>20</y>
-     <width>101</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="minimum">
-    <number>-999</number>
-   </property>
-   <property name="maximum">
-    <number>999</number>
-   </property>
-  </widget>
   <widget class="QProgressBar" name="progressBar">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>260</y>
-     <width>161</width>
+     <x>0</x>
+     <y>220</y>
+     <width>311</width>
      <height>23</height>
     </rect>
    </property>
@@ -42,17 +26,32 @@
     <number>24</number>
    </property>
   </widget>
-  <widget class="QSlider" name="speedcontrol">
+  <widget class="QSlider" name="speedControl">
    <property name="geometry">
     <rect>
-     <x>130</x>
+     <x>100</x>
      <y>70</y>
-     <width>311</width>
+     <width>401</width>
      <height>22</height>
     </rect>
    </property>
+   <property name="minimum">
+    <number>0</number>
+   </property>
+   <property name="maximum">
+    <number>200</number>
+   </property>
+   <property name="value">
+    <number>200</number>
+   </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="invertedAppearance">
+    <bool>true</bool>
+   </property>
+   <property name="invertedControls">
+    <bool>false</bool>
    </property>
   </widget>
   <widget class="QLabel" name="step">
@@ -65,10 +64,10 @@
     </rect>
    </property>
    <property name="text">
-    <string>motor step</string>
+    <string>Angle</string>
    </property>
   </widget>
-  <widget class="QLabel" name="speed">
+  <widget class="QLabel" name="spinSpeed">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -81,12 +80,12 @@
     <string>motorspeed</string>
    </property>
   </widget>
-  <widget class="QLabel" name="lengthUnit">
+  <widget class="QLabel" name="Deg">
    <property name="geometry">
     <rect>
-     <x>240</x>
+     <x>510</x>
      <y>20</y>
-     <width>201</width>
+     <width>121</width>
      <height>31</height>
     </rect>
    </property>
@@ -97,7 +96,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;㎛&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Deg&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -115,7 +114,7 @@
     <set>Qt::NoTextInteraction</set>
    </property>
   </widget>
-  <widget class="QLabel" name="seaence">
+  <widget class="QLabel" name="sequaence">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -128,185 +127,138 @@
     <string>spin sequance</string>
    </property>
   </widget>
-  <widget class="QSlider" name="sequenceselector">
-   <property name="geometry">
-    <rect>
-     <x>130</x>
-     <y>160</y>
-     <width>311</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="focusPolicy">
-    <enum>Qt::StrongFocus</enum>
-   </property>
-   <property name="contextMenuPolicy">
-    <enum>Qt::CustomContextMenu</enum>
-   </property>
-   <property name="inputMethodHints">
-    <set>Qt::ImhNone</set>
-   </property>
-   <property name="maximum">
-    <number>2</number>
-   </property>
-   <property name="singleStep">
-    <number>1</number>
-   </property>
-   <property name="pageStep">
-    <number>1</number>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <property name="tickPosition">
-    <enum>QSlider::TicksBothSides</enum>
-   </property>
-   <property name="tickInterval">
-    <number>1</number>
-   </property>
-  </widget>
   <widget class="QPushButton" name="move">
    <property name="geometry">
     <rect>
-     <x>370</x>
-     <y>260</y>
-     <width>92</width>
-     <height>36</height>
+     <x>490</x>
+     <y>210</y>
+     <width>151</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="text">
     <string>move</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="reset">
+  <widget class="QLabel" name="speed">
    <property name="geometry">
     <rect>
-     <x>240</x>
-     <y>260</y>
-     <width>92</width>
-     <height>36</height>
+     <x>510</x>
+     <y>70</y>
+     <width>131</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>reset</string>
+    <string>Deg/s</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QSlider" name="angleSelector">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>20</y>
+     <width>411</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="maximum">
+    <number>800</number>
+   </property>
+   <property name="sliderPosition">
+    <number>2</number>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="invertedAppearance">
+    <bool>true</bool>
+   </property>
+   <property name="invertedControls">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="warnning">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>110</y>
+     <width>181</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>fast speed makes big error</string>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="seqSel">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>150</y>
+     <width>108</width>
+     <height>36</height>
+    </rect>
+   </property>
+   <property name="maximum">
+    <number>2</number>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="adjVlaue">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>150</y>
+     <width>161</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="adj">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>160</y>
+     <width>101</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Adjustment</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="adjLabel">
+   <property name="geometry">
+    <rect>
+     <x>540</x>
+     <y>160</y>
+     <width>31</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Deg</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="doAdj">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>210</y>
+     <width>151</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Adj</string>
    </property>
   </widget>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>speedcontrol</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>MotorControl</receiver>
-   <slot>exec()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>277</x>
-     <y>81</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>486</x>
-     <y>117</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>sequenceselector</sender>
-   <signal>sliderReleased()</signal>
-   <receiver>MotorControl</receiver>
-   <slot>exec()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>390</x>
-     <y>174</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>486</x>
-     <y>186</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>stepcontroler</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>MotorControl</receiver>
-   <slot>exec()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>197</x>
-     <y>40</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>485</x>
-     <y>61</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>stepcontroler</sender>
-   <signal>valueChanged(QString)</signal>
-   <receiver>lengthUnit</receiver>
-   <slot>setText(QString)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>161</x>
-     <y>40</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>273</x>
-     <y>29</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>reset</sender>
-   <signal>clicked()</signal>
-   <receiver>MotorControl</receiver>
-   <slot>reset()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>313</x>
-     <y>284</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>293</x>
-     <y>305</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>move</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>MotorControl</receiver>
-   <slot>open()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>435</x>
-     <y>288</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>446</x>
-     <y>312</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>move</sender>
-   <signal>clicked()</signal>
-   <receiver>progressBar</receiver>
-   <slot>update()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>395</x>
-     <y>274</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>122</x>
-     <y>279</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <slots>
   <slot>reset()</slot>
  </slots>
