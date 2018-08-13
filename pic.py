@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'motor.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.2
+# Created by: PyQt5 UI code generator 5.7
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -18,12 +18,10 @@ class Ui_MotorControl(object):
         self.progressBar.setObjectName("progressBar")
         self.speedControl = QtWidgets.QSlider(MotorControl)
         self.speedControl.setGeometry(QtCore.QRect(100, 70, 401, 22))
-        self.speedControl.setMinimum(0)
-        self.speedControl.setMaximum(200)
-        self.speedControl.setProperty("value", 200)
+        self.speedControl.setMinimum(10)
+        self.speedControl.setMaximum(2000)
+        self.speedControl.setProperty("value", 1)
         self.speedControl.setOrientation(QtCore.Qt.Horizontal)
-        self.speedControl.setInvertedAppearance(True)
-        self.speedControl.setInvertedControls(False)
         self.speedControl.setObjectName("speedControl")
         self.step = QtWidgets.QLabel(MotorControl)
         self.step.setGeometry(QtCore.QRect(10, 20, 91, 21))

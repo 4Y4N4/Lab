@@ -41,6 +41,7 @@ class Controller:
     def mainLoop(self, Seq, waitTime, Dir, step, stepCb):
         StepCounter = 0
         microStep = self.stepState
+        print (microStep)
         while StepCounter < step:
             j = 0
             for i in Seq[microStep]:
