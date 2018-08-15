@@ -11,14 +11,47 @@ from PyQt5 import uic
 
 controle = Controller()
 motorGUI = Ui_MotorControl()
-try:
-    f = open("Angle", "r")
-except FileNotFoundError :
-    f = open("Angle", "w")
-    f.write("0,0")
-    #(angle,seq)
-finally:
-    f.close()
+
+class SaveFile:
+    def __init__(self, file):
+        self.touch(file)
+        self.f = open(file, "r+")
+        self.f.seek(0)
+
+    def touch(self, file):
+        f = open(file, "a")
+        f.close()
+
+    def read(self):
+        self.f.seek(0)
+        val = self.f.read().split(",")
+
+        try:
+            int(val[0])
+            int(val[1])
+        except:
+            self.f.seek(0)
+            self.f.write("0,0")
+            val = ["0", "0"]
+
+        class ret:
+            pass
+
+        ret.step = int(val[0])
+        ret.seqset = int(val[1])
+
+        return ret
+
+    def write(self, step, seqset):
+        self.f.seek(0)
+        self.f.write("%d,%d" %(step,seqset))
+
+    def close(self):
+        self.f.close()
+
+saveFile = SaveFile("Angle")
+saveFile.read()
+saveFile.close()
 
 class MotorControllerApp:
     def __init__(self, argv):
@@ -31,93 +64,88 @@ class MotorControllerApp:
 
         # Setup here
         ui.angleSelector.valueChanged.connect(self.stepCount)
-        ui.angleSelector.valueChanged.connect(self.mainControl)
         ui.speedControl.valueChanged.connect(self.speedCalculator)
-        ui.speedControl.valueChanged.connect(self.mainControl)
-        ui.seqSel.valueChanged.connect(self.mainControl)
+        ui.seqSel.valueChanged.connect(self.stepChange)
         ui.move.clicked.connect(self.activate)
-        ui.adjVlaue.textChanged.connect(self.adjustment)
         ui.doAdj.clicked.connect(self.adjustment)
-        f =open("Angle","r")
-        Ang = f.read().split(",")
-        ui.angleSelector.setValue(int(float(Ang[0])))
+
+        saveFile = SaveFile("Angle")
+        ang = saveFile.read()
+        ui.angleSelector.setValue(ang.step)
         maxAngle = 270
-        if int(Ang[1])==0:
+        if ang.seqset==0:
             ui.angleSelector.setMaximum(int(maxAngle/360*4096))
-            ui.angleSelector.setValue(int(Ang[0]))
+            ui.angleSelector.setValue(ang.step)
         else:
             ui.angleSelector.setMaximum(int(maxAngle/360*2048))
-            ui.angleSelector.setValue(int(Ang[0]))
-        f.close()
-
-
+            ui.angleSelector.setValue(ang.step)
+        saveFile.close()
 
     def activate(self):
         ui = self.ui
-        valarr = self.mainControl()
-        Seq = controle.seqSetting(valarr[0])
+        val = self.mainControl()
+        Seq = controle.seqSetting(val.seqNum)
         print (Seq)
-        seqSet = int(valarr[0])
-        newAng = int(valarr[1])
-        f = open("Angle","r")
-        stateArr = f.read().split(",")
-        oldAng = int(stateArr[0])
-        ui.progressBar.setMaximum(abs(newAng-int(stateArr[0])))
+        seqSet = int(val.seqNum)
+        newAng = int(val.angleNum)
+
+        saveFile = SaveFile("Angle")
+        state = saveFile.read()
+        oldAng = state.step
+        ui.progressBar.setMaximum(abs(newAng-state.step))
         ui.progressBar.setValue(0)
-        if int(stateArr[1]) == seqSet:
+        if state.seqset == seqSet:
             try: 
                 direc = abs(newAng-oldAng)/(newAng-oldAng)
             except ZeroDivisionError:
                 direc = 1
             step = abs(newAng-oldAng)
-            controle.mainLoop(Seq, abs(valarr[2])/10000 , direc, step, lambda step: ui.progressBar.setValue(step))
-        elif (int(stateArr[1]) == 0):
+            controle.mainLoop(Seq, abs(val.speedNum)/10000 , direc, step, lambda step: ui.progressBar.setValue(step))
+        elif (state.seqset == 0):
             try:
                 direc = abs(newAng-oldAng)/(newAng-oldAng)
             except ZeroDivisionError:
                 direc = 1
             step = (newAng-oldAng)
-            controle.mainLoop(Seq, abs(valarr[2])/10000 , direc, step, lambda step: ui.progressBar.setValue(step))
+            controle.mainLoop(Seq, abs(val.speedNum)/10000 , direc, step, lambda step: ui.progressBar.setValue(step))
         elif (int(seqSet) ==0):
             try:
                 direc = abs(newAng-oldAng)/(newAng-oldAng)
             except ZeroDivisionError:
                 direc = 1
             step = abs(newAng-oldAng)
-            controle.mainLoop(Seq, abs(valarr[2])/10000, direc, step, lambda step: ui.progressBar.setValue(step))
+            controle.mainLoop(Seq, abs(val.speedNum)/10000, direc, step, lambda step: ui.progressBar.setValue(step))
         else:
             try:
                 direc = abs(newAng-oldAng)/(newAng-oldAng)
             except ZeroDivisionError:
                 direc = 1
             step = abs(newAng-oldAng)
-            controle.mainLoop(Seq, abs(valarr[2])/10000, direc, step, lambda step: ui.progressBar.setValue(step))
+            controle.mainLoop(Seq, abs(val.speedNum)/10000, direc, step, lambda step: ui.progressBar.setValue(step))
 
-        #need to rebuild #
-        f.close()
-        Angle = int(valarr[1])
-        f = open("Angle","w")
-        f.write("%d,%d" %(step,seqSet))
-        f.close()
+        saveFile.write(step, seqSet)
+        saveFile.close()
 
     def adjustment(self):
         ui = self.ui
         adjVal = ui.adjVlaue.toPlainText()
-        f = open("Angle","w")
-        fooArr = self.mainControl()
-        foo = fooArr[0]
+        saveFile = SaveFile("Angle")
+        ctrlVal = self.mainControl()
+        foo = ctrlVal.seqNum
         try : 
-            float(adjVal)
+            adjVal = float(adjVal)
         except:
-            adjVal = f.read()
+            adjVal = float(saveFile.read().seqset)
+
         if foo == 0:
-            f.write("%d,%d" %(int(float(adjVal)/360*4096),foo))
-            ui.angleSelector.setValue(int(float(adjVal)/360*4096))
-                
+            saveFile.write(int(adjVal/360*4096), foo)
+            ui.angleSelector.setValue(int(adjVal/360*4096))
         else:
-            ui.angleSelector.setValue(int(float(adjVal)/360*2048))
-            f.write("%d,%d" %(int(float(adjVal)/360*2048),foo))
-        f.close()
+            ui.angleSelector.setValue(int(adjVal/360*2048))
+            saveFIle.write(int(adjVal/360*2048), foo)
+
+        saveFile.close()
+
     def show(self):
         return self.picDialog.show()
 
@@ -129,13 +157,21 @@ class MotorControllerApp:
         seqNum = ui.seqSel.value()
         angleNum = ui.angleSelector.value()
         speedNum = ui.speedControl.value()
-        return [seqNum, angleNum, speedNum]
+
+        class ret:
+            pass
+
+        ret.seqNum = seqNum
+        ret.angleNum = angleNum
+        ret.speedNum = speedNum
+        return ret
+        #return [seqNum, angleNum, speedNum]
 
     def stepCount(self):
         ui = self.ui
         val = ui.angleSelector.value()
-        arrArr = self.mainControl()
-        if arrArr[0] == 0:
+        controlVal = self.mainControl()
+        if controlVal.seqNum == 0:
             deg = float(val) *float(360)/float(4096)
             ui.angleSelector.setMaximum(3*1024)
         else:
@@ -143,6 +179,10 @@ class MotorControllerApp:
             ui.angleSelector.setMaximum(3*512)
         msg = "%f Deg" %deg
         ui.Deg.setText(msg)
+
+    def stepChange(self):
+        ui = self.ui
+        seq = ui.seqSel.value()
         
 
     def speedCalculator(self):
@@ -151,7 +191,7 @@ class MotorControllerApp:
         if wT == 0:
             mesg = 'stop'
         else :
-            if self.mainControl()[0] == 0 :
+            if self.mainControl().seqNum == 0 :
                 speed = float(360)/float(2048)/float(wT)*10000
                 mesg =  '%f Deg/s'%speed
             else:
