@@ -7,8 +7,6 @@ from pic import Ui_MotorControl
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import uic
 
-
-
 controle = Controller()
 motorGUI = Ui_MotorControl()
 
@@ -44,6 +42,7 @@ class SaveFile:
 
     def write(self, step, seqset):
         self.f.seek(0)
+        self.f.truncate(0)
         self.f.write("%d,%d" %(step,seqset))
 
     def close(self):
@@ -52,6 +51,8 @@ class SaveFile:
 saveFile = SaveFile("Angle")
 saveFile.read()
 saveFile.close()
+
+maxAngle = 270
 
 class MotorControllerApp:
     def __init__(self, argv):
@@ -72,7 +73,6 @@ class MotorControllerApp:
         saveFile = SaveFile("Angle")
         ang = saveFile.read()
         ui.angleSelector.setValue(ang.step)
-        maxAngle = 270
         if ang.seqset==0:
             ui.angleSelector.setMaximum(int(maxAngle/360*4096))
             ui.angleSelector.setValue(ang.step)
@@ -94,36 +94,14 @@ class MotorControllerApp:
         oldAng = state.step
         ui.progressBar.setMaximum(abs(newAng-state.step))
         ui.progressBar.setValue(0)
-        if state.seqset == seqSet:
-            try: 
-                direc = abs(newAng-oldAng)/(newAng-oldAng)
-            except ZeroDivisionError:
-                direc = 1
-            step = abs(newAng-oldAng)
-            controle.mainLoop(Seq, abs(val.speedNum)/10000 , direc, step, lambda step: ui.progressBar.setValue(step))
-        elif (state.seqset == 0):
-            try:
-                direc = abs(newAng-oldAng)/(newAng-oldAng)
-            except ZeroDivisionError:
-                direc = 1
-            step = (newAng-oldAng)
-            controle.mainLoop(Seq, abs(val.speedNum)/10000 , direc, step, lambda step: ui.progressBar.setValue(step))
-        elif (int(seqSet) ==0):
-            try:
-                direc = abs(newAng-oldAng)/(newAng-oldAng)
-            except ZeroDivisionError:
-                direc = 1
-            step = abs(newAng-oldAng)
-            controle.mainLoop(Seq, abs(val.speedNum)/10000, direc, step, lambda step: ui.progressBar.setValue(step))
-        else:
-            try:
-                direc = abs(newAng-oldAng)/(newAng-oldAng)
-            except ZeroDivisionError:
-                direc = 1
-            step = abs(newAng-oldAng)
-            controle.mainLoop(Seq, abs(val.speedNum)/10000, direc, step, lambda step: ui.progressBar.setValue(step))
+        try: 
+            direc = abs(newAng-oldAng)/(newAng-oldAng)
+        except ZeroDivisionError:
+            direc = 1
+        step = abs(newAng-oldAng)
+        controle.mainLoop(Seq, abs(val.speedNum)/10000 , direc, step, lambda step: ui.progressBar.setValue(step))
 
-        saveFile.write(step, seqSet)
+        saveFile.write(newAng, seqSet)
         saveFile.close()
 
     def adjustment(self):
@@ -165,7 +143,6 @@ class MotorControllerApp:
         ret.angleNum = angleNum
         ret.speedNum = speedNum
         return ret
-        #return [seqNum, angleNum, speedNum]
 
     def stepCount(self):
         ui = self.ui
@@ -183,7 +160,27 @@ class MotorControllerApp:
     def stepChange(self):
         ui = self.ui
         seq = ui.seqSel.value()
-        
+        saveFile = SaveFile("Angle")
+        prevstate = saveFile.read()
+        prevangle = prevstate.step
+
+        angle = ui.angleSelector.value()
+        if prevstate.seqset == 0 and (seq == 1 or seq == 2):
+            angle = angle / 2
+            prevangle = prevangle / 2
+            ui.angleSelector.setValue(angle)
+            ui.angleSelector.setMaximum(int(maxAngle/360*2048))
+
+        if (prevstate.seqset == 1 or prevstate.seqset == 2) and seq == 0:
+            angle = angle * 2
+            prevangle = prevangle * 2
+            ui.angleSelector.setMaximum(int(maxAngle/360*4096))
+            ui.angleSelector.setValue(angle)
+
+        controle.changeStepSeq(seq)
+
+        saveFile.write(prevangle, seq)
+        saveFile.close()
 
     def speedCalculator(self):
         ui = self.ui
