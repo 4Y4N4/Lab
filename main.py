@@ -120,7 +120,7 @@ class MotorControllerApp:
             ui.angleSelector.setValue(int(adjVal/360*4096))
         else:
             ui.angleSelector.setValue(int(adjVal/360*2048))
-            saveFIle.write(int(adjVal/360*2048), foo)
+            saveFile.write(int(adjVal/360*2048), foo)
 
         saveFile.close()
 
