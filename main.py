@@ -73,6 +73,7 @@ class MotorControllerApp:
         saveFile = SaveFile("Angle")
         ang = saveFile.read()
         ui.angleSelector.setValue(ang.step)
+        ui.seqSel.setValue(ang.seqset)
         if ang.seqset==0:
             ui.angleSelector.setMaximum(int(maxAngle/360*4096))
             ui.angleSelector.setValue(ang.step)
@@ -95,7 +96,7 @@ class MotorControllerApp:
         ui.progressBar.setMaximum(abs(newAng-state.step))
         ui.progressBar.setValue(0)
         try: 
-            direc = abs(newAng-oldAng)/(newAng-oldAng)
+            direc = abs(newAng-oldAng)/(oldAng-newAng)
         except ZeroDivisionError:
             direc = 1
         step = abs(newAng-oldAng)
@@ -192,7 +193,7 @@ class MotorControllerApp:
                 speed = float(360)/float(2048)/float(wT)*10000
                 mesg =  '%f Deg/s'%speed
             else:
-                speed = float(360)/float(4096)/float(wT)*10000
+                speed = float(360)/float(2048)/float(wT)*10000
                 mesg = '%fDeg/s'%speed
         ui.speed.setText(mesg)
 
