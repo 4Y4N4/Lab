@@ -52,7 +52,7 @@ saveFile = SaveFile("Angle")
 saveFile.read()
 saveFile.close()
 
-maxAngle = 270
+maxAngle = 180
 
 class MotorControllerApp:
     def __init__(self, argv):
